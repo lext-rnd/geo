@@ -22,7 +22,11 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.20'
+          go-version: '1.24.x'
+      - name: Normalize Go version in go.mod
+        run: |
+          sed -i 's/^go 1\.24\.0$/go 1.24/' go.mod
+        working-directory: domain-list-community
       - name: Build geosite.dat file
         run: |
           go run ./
