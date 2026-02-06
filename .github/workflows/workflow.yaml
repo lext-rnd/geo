@@ -32,7 +32,7 @@ jobs:
           go run ./ --datapath=./domain
           cp -f dlc.dat "$GITHUB_WORKSPACE/my-geosite.dat"
         working-directory: domain-list-community
-      - name: Upload geosite.dat to release
+      - name: Upload my-geosite.dat to release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: auto-${{ github.run_number }}
