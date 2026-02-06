@@ -21,7 +21,7 @@ jobs:
           path: domain-list-community
       - name: Copy data folder from geo to domain-list-community
         run: |
-          cp -R "$GITHUB_WORKSPACE/data" "domain-list-community/domain"
+          cp -R "$GITHUB_WORKSPACE/domain" "domain-list-community/domain"
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
