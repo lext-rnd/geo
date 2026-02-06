@@ -19,14 +19,18 @@ jobs:
         with:
           repository: v2fly/domain-list-community
           path: domain-list-community
+      - name: Copy data folder from geo to domain-list-community
+        run: |
+          rm -rf "domain-list-community/data"
+          cp -R "$GITHUB_WORKSPACE/data" "domain-list-community/mydata"
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.24'
       - name: Build geosite.dat file
         run: |
-          go run ./
-          cp -f dlc.dat "$GITHUB_WORKSPACE/geosite.dat"
+          go run ./ --datapath=domain-list-community/mydata
+          cp -f dlc.dat "$GITHUB_WORKSPACE/my-geosite.dat"
         working-directory: domain-list-community
       - name: Upload geosite.dat to release
         uses: softprops/action-gh-release@v1
