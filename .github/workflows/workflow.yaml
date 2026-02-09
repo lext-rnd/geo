@@ -23,6 +23,7 @@ jobs:
         run: |
           rm -rf "domain-list-community/domain"
           cp -R "$GITHUB_WORKSPACE/domain" "domain-list-community/domain"
+          for f in domain-list-community/domain/*.*; do mv -- "$f" "${f%.*}"; done
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
