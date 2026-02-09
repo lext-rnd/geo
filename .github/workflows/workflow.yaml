@@ -27,8 +27,7 @@ jobs:
       - name: Copy domain folder from geo to domain-list-community and merge all txt files
         run: |
           rm -rf "domain-list-community/domain-merge"
-          cp -R "$GITHUB_WORKSPACE/domain" "domain-list-community/domain-merge"
-          for f in domain-list-community/domain-merge/*.txt; do [ -e "$f" ] || continue; cat "$f"; [ -s "$f" ] && [ "$(tail -c1 "$f" | od -An -tu1 | tr -d ' ')" != "10" ] && printf '\n'; done > all-my
+          for f in $GITHUB_WORKSPACE/domain/*.txt; do [ -e "$f" ] || continue; cat "$f"; [ -s "$f" ] && [ "$(tail -c1 "$f" | od -An -tu1 | tr -d ' ')" != "10" ] && printf '\n'; done > domain-list-community/domain-merge/all-my
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
