@@ -24,14 +24,24 @@ jobs:
           rm -rf "domain-list-community/domain"
           cp -R "$GITHUB_WORKSPACE/domain" "domain-list-community/domain"
           for f in domain-list-community/domain/*.*; do mv -- "$f" "${f%.*}"; done
+      - name: Copy domain folder from geo to domain-list-community and merge all txt files
+        run: |
+          rm -rf "domain-list-community/domain-merge"
+          cp -R "$GITHUB_WORKSPACE/domain" "domain-list-community/domain-merge"
+          for f in domain-list-community/domain-merge/*.txt; do [ -e "$f" ] || continue; cat "$f"; [ -s "$f" ] && [ "$(tail -c1 "$f" | od -An -tu1 | tr -d ' ')" != "10" ] && printf '\n'; done > all-my
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.24'
-      - name: Build geosite.dat file
+      - name: Build mygeosite.dat file
         run: |
           go run ./ --datapath=./domain
           cp -f dlc.dat "$GITHUB_WORKSPACE/my-geosite.dat"
+        working-directory: domain-list-community
+      - name: Build allmygeosite.dat file
+        run: |
+          go run ./ --datapath=./domain-merge
+          cp -f dlc.dat "$GITHUB_WORKSPACE/all-my-geosite.dat"
         working-directory: domain-list-community
       - name: Upload my-geosite.dat to release
         uses: softprops/action-gh-release@v1
@@ -39,4 +49,4 @@ jobs:
           tag_name: auto-${{ github.run_number }}
           name: Auto Release ${{ github.run_number }}
           body: Automated release from push to main.
-          files: my-geosite.dat
+          files: my-geosite.dat, all-my-geosite.dat
